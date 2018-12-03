@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+   <!DOCTYPE mapper
+     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.share.comment.mapper.CommentMapper">
+	<insert id="newComment">
+		insert into s_comments(comment_object_type, comment_object_id,comment_author, comment_author_name,
+			comment_content, comment_parent, comment_parent_author, comment_parent_author_name)
+		values(#{comment_object_type},#{comment_object_id},#{comment_author},#{comment_author_name},
+			#{comment_content},#{comment_parent},#{comment_parent_author},#{comment_parent_author_name})
+	</insert>
+	<select id="getCommentByID" resultType="Comment" parameterType="Integer">
+		select * from s_comments where id = #{id}
+	</select>
+	<select id="getCommentsOfPost" resultType="Comment">
+		select * from s_comments where comment_object_type=0
+			and comment_object_id = #{id} order by comment_ts desc limit #{offset},#{count}
+	</select>
+	<select id="getCommentsOfPhoto" resultType="Comment">
+		select * from s_comments where comment_object_type=1
+			and comment_object_id = #{id} order by comment_ts desc limit #{offset},#{count}
+	</select>
+	<select id="getCommentsOfAlbum" resultType="Comment">
+		select * from s_comments where comment_object_type=2
+			and comment_object_id = #{id} order by comment_ts desc limit #{offset},#{count}
+	</select>
+	<select id="getCommentsOfShortPost" resultType="Comment">
+		select * from s_comments where comment_object_type=4
+			and comment_object_id = #{id} order by comment_ts desc limit #{offset},#{count}
+	</select>
+	<select id="getCommentAuthor" resultType="map">
+		select comment_author,comment_author_name from s_comments where id=#{comment_id}
+	</select>
+	<select id="commentsCount" resultType="Integer">
+		select count(*) from s_comments where comment_object_type=#{object_type} and comment_object_id=#{object_id}
+	</select>
+
+</mapper>
