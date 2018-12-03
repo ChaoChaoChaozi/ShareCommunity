@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.share.notification.mapper.NotificationMapper">
+	<insert id="save" parameterType="Notification" keyProperty="id">
+		 insert into s_notifications (notify_type,notify_id, object_type, object_id, notified_user, notifier) 
+		 values(#{notify_type},#{notify_id}, #{object_type}, #{object_id}, #{notified_user}, #{notifier})
+	</insert>
+	
+	<select id="getNotificationsOfType" resultType="Notification">
+		 select * from s_notifications where notified_user=#{user_id} and notify_type=#{notify_type} order by ts desc
+	</select>
+	
+	<select id="getNotificationsOfTypes" resultType="Notification">
+		 select * from s_notifications where notified_user= #{user_id} 
+		 and notify_type in 
+		 <foreach item="notify_type" collection="notify_types" open="(" separator="," close=")">
+		 	#{notify_type}
+		 </foreach>
+		 order by ts desc
+	</select>
+	
+	<select id="getNotificationsCount" resultType="map" parameterType="int">
+		 select notify_type,count(*) count from  
+		 s_notifications where notified_user=#{user_id} group by notify_type
+	</select>
+	<select id="get" resultType="Notification">
+		select * from s_notifications where id=#{notification_id}
+	</select>
+</mapper>
