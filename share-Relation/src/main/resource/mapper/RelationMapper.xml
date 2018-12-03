@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.share.relation.mapper.RelationMapper">
+	<insert id="save" parameterType="Relation">
+	insert into s_relations (object_type, object_id, tag_id) values(#{object_type},#{object_id},#{tag_id})
+	</insert>
+	<delete id="delete" >
+	delete from s_relations where id = #{id}
+	</delete>
+	<select id="get" resultType="Relation">
+	select * from s_relations  where tag_id = #{tag_id} order by add_ts
+	</select>
+	<select id="getRelationsInTags" resultType="Relation">
+	select * from s_relations  where FIND_IN_SET(tag_id, #{tag_ids})
+	</select>
+</mapper>

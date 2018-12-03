@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.share.tag.mapper.TagMapper">
+	<select id="queryTagID" resultType="int">
+		select id from s_tags where tag=#{tag}
+	</select>
+	<insert id="saveTag" parameterType="Tag">
+		insert into s_tags (id,tag,cover) values(null,#{tag},#{cover})
+	</insert>
+	<select id="getTags" resultType="Tag">
+	select * from s_tags where cover is not null limit 12
+	</select>
+	<select id="queryTag" resultType="Tag">
+		select * from s_tags where id=#{id}
+	</select>
+	<select id="queryTags" resultType="Tag">
+		select * from s_tags where FIND_IN_SET(id, #{tgs_id})
+	</select>
+</mapper>

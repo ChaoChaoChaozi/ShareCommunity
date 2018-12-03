@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.share.sso.mapper.UserMapper">
+	<!-- 通过username查找用户 -->
+	<select id="findByUsername" parameterType="String" resultType="User">
+		select * from s_users where user_name=#{username}
+	</select>
+	<!-- 通过email查找用户 -->
+	<select id="findByEmail" parameterType="String" resultType="User">
+		select * from s_users where user_email=#{Email}
+	</select>
+	<!-- 通过id查找用户 -->
+	<select id="getUserByID" parameterType="int" resultType="User">
+		select * from s_users where id=#{id}
+	</select>
+	
+	<update id="updateActivationKey" >
+		update s_users set user_activationKey=#{activationKey} where id=#{id}
+	</update>
+	
+	<update id="activateUser" >
+		update s_users set user_activationKey=#{activationKey} where id=#{id}
+	</update>
+	
+	
+	<select id="getUser" resultType="User">
+		select * from  s_users where ${user_activationKey} =#{key}
+	</select>
+	
+	<select id="getUsers" resultType="User" parameterType="int">
+		 select * from s_users limit #{count}
+	</select>
+	<update id="updateAvatar">
+		update s_users set user_avatar=#{avatar} where id=${user_id}
+	</update>
+	
+	<update id="updateUsernameAndDesc">
+		update s_users set user_name=#{user_name}, user_desc=#{user_desc} where id=${id}
+	</update>
+	
+	<update id="updateResetPwdKey">
+		update s_users set resetpwd_key=#{key} where user_email=#{email}
+	</update>
+	<select id="isAllowedResetPwd" parameterType="String" resultType="String">
+	 select resetpwd_key from s_users where user_email=#{email}
+	</select>
+	
+	<update id="updatePassword"  parameterType="String">
+		update s_users set user_pwd=#{user_pwd} where user_email=#{user_email}
+	</update>
+	
+	<insert id="register" parameterType="User" >
+	insert into s_users 
+	(user_name, 
+	user_email, 
+	user_pwd, 
+	user_activationKey, 
+	user_status, 
+	user_avatar)
+	values(
+	#{user_name},
+	#{user_email},
+	#{user_pwd},
+	#{user_activationKey},
+	#{user_status},
+	#{user_avatar})
+	</insert>
+	
+	<select id="getUsersByIDs" resultType="User">
+	
+	 select * from s_users where id in 
+		 <foreach item="p" collection="pList" open="(" separator="," close=")">
+		 	#{p}
+		 </foreach>
+	
+	</select>
+	
+	<select id="getUserofUsername" parameterType="String" resultType="User">
+		select * from s_users where user_name LIKE '%${username}%'
+	</select>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
