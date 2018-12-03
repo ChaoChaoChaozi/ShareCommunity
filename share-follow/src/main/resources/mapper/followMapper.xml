@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.share.follow.mapper.FollowMapper">
+	<insert id="saveFollowing" parameterType="Following">
+		insert into  s_followings (user_id, user_name, 
+			following_user_id,
+			following_user_name)
+			values(#{user_id},#{user_name},#{following_user_id},#{following_user_name})
+	</insert>
+	
+	<insert id="saveFollower" parameterType="Follower">
+	insert into s_followers (user_id, user_name,
+			follower_user_id, 
+			follower_user_name)
+			values(#{user_id},#{user_name},#{follower_user_id},#{follower_user_name})
+	</insert>
+	<delete id="delFollowing" >
+	delete from s_followings where user_id=#{user_id} and following_user_id=#{following_user_id}
+	</delete>
+	
+	<delete id="delFollower" parameterType="Follower">
+	 delete from s_followers where user_id=#{user_id} and follower_user_id=#{follower_user_id}
+
+	</delete>
+	
+	<select id="getFollowings" resultType="Following" >
+	select * from s_followings where user_id=#{user_id}
+	</select>
+	<select id="getFollowers" resultType="Follower" >
+		select * from s_followers where user_id=#{user_id}
+	</select>
+	
+	<select id="isFollowingUsers" resultType="Integer">
+	select following_user_id from 
+   		s_followings  where user_id=#{user_id} and FIND_IN_SET(following_user_id, (#{following_ids}))
+	</select>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
