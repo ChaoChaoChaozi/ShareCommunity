@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.share.interest.mapper.InterestMapper">
+	<insert id="interestInTag" >
+		insert into s_interests (user_id, tag_id) values(#{user_id},#{tag_id})
+	</insert>
+	<delete id="undoInterestInTag" >
+		delete from s_interests where user_id=#{user_id} and tag_id=#{tag_id}
+	</delete>
+	
+	<select id="getUsersInterestedInTag" resultType="Integer">
+		select user_id from s_interests where tag_id=#{tag_id}
+	</select>
+	
+	<select id="hasInterestInTag" >
+		select count(*)  from s_interests where user_id=#{user_id} and tag_id=#{tag_id}
+	</select>
+	<select id="hasInterestInTags">
+		select count(*) from s_interests where user_id=#{user_id} and tags=#{tags}
+	</select>
+	<select id="getTagsUserInterestedIn" resultType="List">
+		select t2.* from s_interests t1, s_tags t2 
+			 where t1.user_id=#{user_id} and t1.tag_id=t2.id
+	</select>
+</mapper>

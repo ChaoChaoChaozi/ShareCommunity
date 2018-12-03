@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.share.like.mapper.LikeMapper">
+	<insert id="like">
+		insert into s_likes (user_id, object_type, object_id) values(#{user_id},#{object_type},#{object_id})
+	</insert>
+	<delete id="undolike">
+		delete from s_likes where user_id=#{user_id} and object_type=#{object_type} and object_id=#{object_id}
+	</delete>
+	<select id="likersCount" resultType="int">
+		select count(*) from s_likes where user_id=#{user_id} 
+	</select>
+	<select id="getLikers" resultType="int">
+		select user_id from s_likes where object_type=#{object_type} and object_id=#{object_id}
+	</select>
+	<select id="likeCount" resultType="int">
+		select count(*) from s_likes where user_id=#{user_id}
+	</select>
+	<select id="isLike" resultType="int">
+		select count(*) from s_likes where user_id=#{user_id} and object_type=#{object_type} and object_id=#{object_id}
+	</select>
+</mapper>
