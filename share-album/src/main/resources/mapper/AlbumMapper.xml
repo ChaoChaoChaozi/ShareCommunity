@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.share.album.mapper.AlbumMapper">
+	<insert id="saveAlbum" parameterType="Album" keyProperty="id" useGeneratedKeys="true">
+		
+	insert into s_albums (user_id,album_title,album_desc,status,cover)
+	 values(#{user_id},#{album_title},#{album_desc},#{status},#{cover})
+	<selectKey resultType="int" keyProperty="id" order="AFTER"> 
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	<select id="getAlbumUser" parameterType="int" resultType="int">
+	select user_id from s_albums where id = #{id}	
+	</select>
+	
+	<insert id="savePhoto" parameterType="Photo" keyProperty="id" useGeneratedKeys="true">
+	<selectKey resultType="int" keyProperty="id" order="AFTER">
+		 SELECT LAST_INSERT_ID()
+	</selectKey>
+	insert into s_photos (`key`,album_id,`desc`) values(#{key},#{album_id},#{desc})
+	</insert>
+	
+	<select id="getAlbumID" parameterType="int" >
+		select id from s_albums
+		where user_id=#{user_id} and status=#{status}
+	</select>
+	
+	<select id="getPhotos" parameterType="Integer" resultType="Photo">
+		select * from s_photos
+		where album_id=#{album_id} order by ts asc
+	</select>
+	
+	<update id="updateAlbumDesc">
+		update s_albums
+		set album_desc=#{album_desc}, status=#{album_status} 
+		where id=#{album_id}
+	</update>
+	
+	<update id="updateAlbumCover">
+		update s_albums set cover=#{cover} where id=#{album_id}
+	</update>
+	
+	<update id="updatePhotoDesc">
+		update s_photos set `desc`=#{photo_desc} where id=#{photo_id}
+	</update>
+	
+	<update id="updatePhotosCount">
+		update s_albums set photos_count=#{count} where id=#{album_id}
+	</update>
+	
+	
+	<update id="updateAlbumInfo" parameterType="Album">
+		update s_albums
+		set album_desc=#{album_desc}, photos_count=#{photos_count}, 
+		status=#{status},cover=#{cover},album_tags=#{album_tags}
+		where id=#{id}
+	</update>
+	
+	<select id="getAlbumsOfUser" parameterType="Integer" resultType="Album">
+		select * from s_albums where user_id=#{id}
+	</select>
+	
+	<select id="getAlbum" parameterType="Integer" resultType="Album">
+		select * from s_albums where id=#{id}
+	</select>
+	
+	<select id="getKey" parameterType="Integer" resultType="String">
+		select `key` from s_photos where id=#{id}
+	</select>
+	
+	<select id="getAuthorOfAlbum" parameterType="Integer" resultType="Integer">
+		select user_id from s_albums where id=#{id}
+	</select>
+	
+	<select id="getAlbumContainPhoto"  resultType="Album">
+		select * from s_photos t1,s_albums t2 where t1.id=#{photo_id} and t1.album_id=t2.id
+	</select>
+	
+	<delete id="deletePhoto" parameterType="Integer">
+		delete from s_photos where id=#{id}
+	</delete>
+</mapper>
